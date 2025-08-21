@@ -72,7 +72,7 @@ bool fetchPageData(char* pageData, int thisPageNum, const char * tableRelFileNod
     delete[] pageDataFirst;
 
 #elif defined(__linux__)
-
+    processHalfPage(pageData, thisPageNum, tableRelFileNodeId, tableOid, mode);
 #endif
 
 };
