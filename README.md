@@ -74,7 +74,7 @@ id: 2 name: User_2 age: 108 class: 20 desc: This is a description for row 2
 
 | VERSION | UPDATE     | NOTE                                     |
 | ------- | ---------- | ---------------------------------------- |
-| v0.1    | 2025.8.21  | first version                            |
+| v0.1    | 2024.8.21  | first version                            |
 
 
 
