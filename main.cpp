@@ -80,6 +80,10 @@ char* get_program_name(char** args) {
 }
 
 int main(int argc, char* argv[]) {
+    struct tm *timenow;
+    time_t now;
+    time(&now);
+    timenow = localtime(&now);
     char** args = argv;
     int arg = argc;
     char* programName = get_program_name(args);
@@ -89,9 +93,32 @@ int main(int argc, char* argv[]) {
         std::cerr << "Usage: " << argv[0] << " <command> <subcommand> [options] <name>" << std::endl;
         return 1;
     }
+//    printf("Begin 当前时间: %02d:%02d:%02d\n",
+//           timenow->tm_hour,
+//           timenow->tm_min,
+//           timenow->tm_sec);
+//    FILE *fp = fopen("output.txt", "w");  // "w" 写模式，文件存在会清空
+//    if (fp == NULL) {
+//        perror("fopen failed");
+//        return 1;
+//    }
+
+//    fprintf(fp, "begin time: %02d:%02d:%02d",
+//            timenow->tm_hour,
+//            timenow->tm_min,
+//            timenow->tm_sec);
+//
+
     createParserApp(argc, argv);
-
-
+    printf("Finish 当前时间: %02d:%02d:%02d\n",
+           timenow->tm_hour,
+           timenow->tm_min,
+           timenow->tm_sec);
+//    fprintf(fp, "end time: %02d:%02d:%02d",
+//            timenow->tm_hour,
+//            timenow->tm_min,
+//            timenow->tm_sec);
+//    fclose(fp);
     free(programName);
 }
 

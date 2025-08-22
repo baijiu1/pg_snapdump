@@ -115,10 +115,10 @@ void decode_timestamp_internal(CtidNode* tuple, int colSeq, uint32_t * offset, b
     char* buffer = new char [buff_size];
     memcpy(buffer, tuple->tuple.cache_data + startOffset, buff_size);
     /* Skip padding bytes. */
-    while (*buffer == 0x00)
-    {
-        buffer++;
-    }
+//    while (*buffer == 0x00)
+//    {
+//        buffer++;
+//    }
     int64		timestamp,
             timestamp_sec;
     int32		jd,
@@ -129,7 +129,8 @@ void decode_timestamp_internal(CtidNode* tuple, int colSeq, uint32_t * offset, b
     if (buff_size < sizeof(int64))
         return;
 
-    timestamp = *(int64 *) buffer;
+    memcpy(&timestamp, buffer + (buff_size - sizeof(timestamp)), sizeof(timestamp));
+//    timestamp = *(int64 *) buffer;
 
     if (timestamp == DT_NOBEGIN)
     {

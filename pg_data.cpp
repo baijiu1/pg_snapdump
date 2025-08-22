@@ -115,7 +115,11 @@ int resolveTableHeapTupleData(char* tuple, int thisPageNum, ColAttribute& colAtt
         chaseTuple.tuple_length = len - t_hoff;
         chaseTuple.tuple_offset = tupleOffset;
         fileCount < 10 ? chaseTuple.cache_data = t_data : chaseTuple.cache_data = nullptr;
-        append_to_ctid_chain(chaseTuple);
+        CtidNode *node = new CtidNode;
+        node->tuple = chaseTuple;
+        fetchRows(node);
+        delete node;
+//        append_to_ctid_chain(chaseTuple);
         return 0;
     } else {
         if (currentTupleBlockId != thisPageNum) {
@@ -128,17 +132,26 @@ int resolveTableHeapTupleData(char* tuple, int thisPageNum, ColAttribute& colAtt
                 chaseTuple.tuple_length = len - t_hoff;
                 chaseTuple.tuple_offset = tupleOffset;
                 fileCount < 10 ? chaseTuple.cache_data = t_data : chaseTuple.cache_data = nullptr;
-                append_to_ctid_chain(chaseTuple);
+                CtidNode *node = new CtidNode;
+                node->tuple = chaseTuple;
+                fetchRows(node);
+                delete node;
+//                append_to_ctid_chain(chaseTuple);
                 return 0;
             }
         } else {
             chaseTuple.tuple_length = len - t_hoff;
             chaseTuple.tuple_offset = tupleOffset;
             fileCount < 10 ? chaseTuple.cache_data = t_data : chaseTuple.cache_data = nullptr;
-            append_to_ctid_chain(chaseTuple);
+            CtidNode *node = new CtidNode;
+            node->tuple = chaseTuple;
+            fetchRows(node);
+            delete node;
+//            append_to_ctid_chain(chaseTuple);
             return 0;
         }
     }
+
 };
 
 CtidNode* reverseList(CtidNode* head) {
@@ -158,6 +171,26 @@ void reverseAllChains(std::vector<CtidNode*>& chains) {
         chains[i] = reverseList(chains[i]);
     }
 }
+
+//int fetchRowsForSingle(chaseCtidList& tuples) {
+//    uint32_t * offset = new uint32_t;
+//    *offset = 0;
+//
+//    for (int i = 0; i < tuples.tuple_nattrs; ++i) {
+//        if (tuples.null_bit_map[i] == 0) {
+//            printf(" %s: is null ", tuples.column_name[i].c_str());
+//            // if null skip
+//            continue;
+//        }
+//        printf(" %s:", tuples.column_name[i].c_str());
+//        tupleFetchType(tuples, i, offset);
+//        if (*offset >= tuples.tuple_length) {
+//            printf(" 列读取完毕 ");
+//            break;
+//        }
+//    }
+//    delete offset;
+//}
 
 int fetchRows(CtidNode* tuple) {
     uint32_t * offset = new uint32_t;
@@ -187,7 +220,7 @@ int fetchRows(CtidNode* tuple) {
         }
 
         if (*offset >= tuple->tuple.tuple_length) {
-            printf(" 列读取完毕 ");
+            printf(" 列读取完毕 \n");
             break;
         }
     }
@@ -224,7 +257,6 @@ int printAllCtidChain() {
                 fetchRows(current);
             } else {
                 // if table data file is large file(more than 10G)
-                // blockId -> [ctidNode1, ctidNode3, ctidNode5, ctidNode6, ctidNode10]
 //                makeCtidBSTNode();
             }
             if (onlyNewTuple) {

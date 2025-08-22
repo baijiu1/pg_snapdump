@@ -192,6 +192,7 @@ int process_files_concurrent(const char* basePath,
 
 
 int InitAccessForProcessRecover(char* oid) {
+
 //    size_t lastSlashPos = oid.find_last_of('/');
     int fd;
     void* FilenodeMap;
@@ -242,6 +243,7 @@ int InitAccessForProcessRecover(char* oid) {
     findTableData(fd, tableRelFileNodeId, tableOid, 0);
 //    findTableOid(tableRelFileNodeId, tableOid, fd);
     tableOnDiskClose(fd, 100);
+
 //    printf("\n-----\n");
     // pg_attribute
     char pg_attribute_path[330];
@@ -251,49 +253,51 @@ int InitAccessForProcessRecover(char* oid) {
     strcat(pg_attribute_path, buf1);
     fd = tableOnDiskOpen(pg_attribute_path, 10);
     findTableData(fd, "0", tableOid, 1);
+
 //    findTableAttribute(fd, tableOid);
     tableOnDiskClose(fd, 100);
 //    printf("\n-----\n");
     int groupSize1 = 10;
     int forkCount1 = (15 + groupSize1 - 1) / groupSize1;
-
+//    printf(" xxx ");
     // table data
     char oid_path[300];
     memcpy(oid_path, path, pathLen);
     char* oidName = oid + pathLen + 1;
     fileCount = getTableFileCount(oid_path, oidName);
 //    printf(" oid_path: %s %s ", oid_path, oidName);
-    SharedCtidNodeVector* shmCtidBase = create_shared_vector(fileCount * 131072);
-    if (parserAllFiles) {
-        if (fileCount == 1) {
-            fd = tableOnDiskOpen(oid, 10);
-            findTableData(fd, "1", nullptr, 2);
-            tableOnDiskClose(fd, 100);
-        } else {
-            if (fileCount < 10) {
-                for (int i = 1; i <= fileCount; ++i) {
-                    char buff[100];
-                    memcpy(oid_path, path, pathLen);
-                    oidName =  oid + pathLen;
-                    snprintf(buff, sizeof(buff), ".%u", i);
-                    strcat(oidName, buff);
-                    strcat(oid_path, oidName);
-                    fd = tableOnDiskOpen(oid_path, 10);
-                    findTableData(fd, "1", nullptr, 2);
-                    tableOnDiskClose(fd, 100);
-                }
-            } else {
-                process_files_concurrent(oid_path, oidName, fileCount, 10, 0);
+//    SharedCtidNodeVector* shmCtidBase = create_shared_vector(fileCount * 131072);
 
-                printf("All files processed!\n");
-
-            }
-        }
-    } else {
+//    if (parserAllFiles) {
+//        if (fileCount == 1) {
+//            fd = tableOnDiskOpen(oid, 10);
+//            findTableData(fd, "1", nullptr, 2);
+//            tableOnDiskClose(fd, 100);
+//        } else {
+//            if (fileCount < 10) {
+//                for (int i = 1; i <= fileCount; ++i) {
+//                    char buff[100];
+//                    memcpy(oid_path, path, pathLen);
+//                    oidName =  oid + pathLen;
+//                    snprintf(buff, sizeof(buff), ".%u", i);
+//                    strcat(oidName, buff);
+//                    strcat(oid_path, oidName);
+//                    fd = tableOnDiskOpen(oid_path, 10);
+//                    findTableData(fd, "1", nullptr, 2);
+//                    tableOnDiskClose(fd, 100);
+//                }
+//            } else {
+//                process_files_concurrent(oid_path, oidName, fileCount, 10, 0);
+//
+//                printf("All files processed!\n");
+//
+//            }
+//        }
+//    } else {
         fd = tableOnDiskOpen(oid, 10);
         findTableData(fd, "1", nullptr, 2);
         tableOnDiskClose(fd, 100);
-    }
+//    }
     printAllCtidChain();
     delete tableOid;
 //    delete tableRelFileNodeId;
@@ -305,15 +309,18 @@ int findTableData(int fd, const char *tableRelFileNodeId, unsigned int* tableOid
     pageData = new char[_PAGESIZE];
     pageTotalNum = new int(0);
     off_t fileSize = fetchFileTotalNum(fd, pageTotalNum);
+    printf("\n共%d页\n", *pageTotalNum);
     for (int i = 0; *pageTotalNum == 1 ? i < *pageTotalNum : i <= *pageTotalNum; ++i) {
+//        printf("\n正在读取%d页", i);
         if (i * 16384 >= fileSize) {
             printf("\n读取完毕");
             return 0;
         }
         fetchPage(fd, i, pageData);
         fetchPageData(pageData, i, tableRelFileNodeId, tableOid, fileSize, mode);
-
     }
+    delete pageTotalNum;
+    delete pageData;
     return 0;
 
 };

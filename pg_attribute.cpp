@@ -169,7 +169,7 @@ int resolvePgAttributeHeapData(char* tuple, unsigned int* tableOid, ColAttribute
     HeapTupleHeaders tup = (HeapTupleHeaders)tuple;
     char* t_data = tuple + tup->t_hoff;
     Form_pg_attribute pgAttributeData = (Form_pg_attribute) t_data;
-    if (pgAttributeData->attrelid == *tableOid) {
+    if (pgAttributeData->attrelid == *tableOid && tup->t_choice.t_heap.t_xmax == 0) {
         if (strcmp("ctid", pgAttributeData->attname.data) != 0 &&
             strcmp("xmin", pgAttributeData->attname.data) != 0 &&
             strcmp("cmin", pgAttributeData->attname.data) != 0 &&
@@ -177,11 +177,19 @@ int resolvePgAttributeHeapData(char* tuple, unsigned int* tableOid, ColAttribute
             strcmp("cmax", pgAttributeData->attname.data) != 0 &&
             strcmp("tableoid", pgAttributeData->attname.data) != 0) {
             // 记录好attnum，然后排序
-            colAttr.colAttNum.emplace_back(pgAttributeData->attnum);
-            colAttr.colName.emplace_back(pgAttributeData->attname.data);
-            colAttr.colType.emplace_back(pgAttributeData->atttypid);
-            colAttr.colAttlen.emplace_back(pgAttributeData->attlen);
-            colAttr.colAttalign.emplace_back(pgAttributeData->attalign);
+
+//            for (int i = 0; i < colAttr.colName.size(); ++i) {
+//                if (colAttr.colName[i] == pgAttributeData->attname.data) {
+//                    continue;
+//                } else {
+                    colAttr.colAttNum.emplace_back(pgAttributeData->attnum);
+                    colAttr.colName.emplace_back(pgAttributeData->attname.data);
+                    colAttr.colType.emplace_back(pgAttributeData->atttypid);
+                    colAttr.colAttlen.emplace_back(pgAttributeData->attlen);
+                    colAttr.colAttalign.emplace_back(pgAttributeData->attalign);
+//                }
+//            }
+
         }
     }
     return 0;

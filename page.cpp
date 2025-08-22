@@ -1,9 +1,9 @@
 //
-// Created by 白杰 on 2024/12/16.
+// Created by baijiu1 on 2024/12/16.
 //
 
 #include "page.h"
-vector<TupleNode*> TupleCtidVec;
+
 
 bool fetchPage(int fd, int pageNum, char* outPage) {
     void* PageHeap;
@@ -29,8 +29,6 @@ off_t fetchFileTotalNum(int fd, int* pageTotalNum) {
     return fileSize;
 };
 
-vector<string> col;
-vector<uint32_t> colType;
 ColAttribute colAttr = {};
 bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileNodeId, unsigned int* tableOid, int mode) {
     PageHeader header = (PageHeader)halfPageData;
@@ -42,7 +40,9 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
             uint16_t offset = items[i].lp_off;
             uint16_t flags = items[i].lp_flags;
             if (len == 0) continue;
+            if (offset >= 8192) continue;
             char* tuple = new char[len + 1];
+//            printf(" f: %d ", offset);
             memcpy(tuple, halfPageData + offset, len);
             // pg_class
             if (mode == 0) {
