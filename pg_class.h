@@ -6,15 +6,12 @@
 #define PG_SNPDUMP_PG_CLASS_H
 
 #include "pg_common.h"
-#include <string>
 #include <iostream>
 #include <cstdio>
 
 using namespace std;
 
 
-int parserPgSysTableHeaderStruct(char*, int, string&, unsigned int*);
-int findTableOid(string&, unsigned int*, int);
 int resolvePgClassHeapData(char*, const char*, unsigned int*);
 
 // pg_class

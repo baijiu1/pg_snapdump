@@ -7,13 +7,9 @@
 #include <cstdio>
 #include <iostream>
 #include "pg_common.h"
-//#include "page.h"
 
 using namespace std;
 
-
-int parserPgSysTableHeaderStruct(char*, unsigned int*);
-int findTableAttribute(int, unsigned int *);
 int resolvePgAttributeHeapData(char*, unsigned int*, ColAttribute&);
 
 
