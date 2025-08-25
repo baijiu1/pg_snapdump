@@ -8,11 +8,7 @@ void decode_smallint(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [off];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
-//    while (*buffer == 0)
-//    {
-//        buffer++;
-//    }
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int16)), off);
     CopyAppendFmt("%d", *(int16 *) buffer);
 };
 
@@ -20,7 +16,7 @@ void decode_int(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [off];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int32)), off);
     CopyAppendFmt("%d", *(int32 *) buffer);
 
 };
@@ -37,11 +33,7 @@ void decode_bigint(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [off];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
-    while (*buffer == 0)
-    {
-        buffer++;
-    }
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int64)) , off);
     CopyAppendFmt(INT64_FORMAT, *(int64 *) buffer);
 };
 
@@ -53,7 +45,7 @@ void decode_float4(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [off];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int32)), off);
     CopyAppendFmt("%.12f", *(float *) buffer);
 };
 
@@ -61,7 +53,7 @@ void decode_float8(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [off];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int64)), off);
     CopyAppendFmt("%.12lf", *(double *) buffer);
 };
 

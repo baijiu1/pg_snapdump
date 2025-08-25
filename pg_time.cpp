@@ -49,12 +49,12 @@ void decode_time(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t buff_size = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [buff_size];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, buff_size);
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (buff_size - sizeof(int64)), buff_size);
     /* Skip padding bytes. */
-    while (*buffer == 0x00)
-    {
-        buffer++;
-    }
+//    while (*buffer == 0x00)
+//    {
+//        buffer++;
+//    }
     int64		timestamp,
             timestamp_sec;
     timestamp = *(int64 *) buffer;
@@ -67,20 +67,14 @@ void decode_time(CtidNode* tuple, int colSeq, uint32_t * offset){
 
 void decode_timetz(CtidNode* tuple, int colSeq, uint32_t * offset){
     decode_timestamp_internal(tuple, colSeq, offset, true);
-
 };
 
 void decode_date(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t buff_size = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [buff_size];
-    memcpy(buffer, tuple->tuple.cache_data + startOffset, buff_size);
+    memcpy(buffer, tuple->tuple.cache_data + startOffset + (buff_size - sizeof(int32)), buff_size);
 
-    /* Skip padding bytes. */
-//    while (*buffer == 0x00)
-//    {
-//        buffer++;
-//    }
     int32		d,
             jd,
             year,
@@ -114,11 +108,6 @@ void decode_timestamp_internal(CtidNode* tuple, int colSeq, uint32_t * offset, b
     size_t buff_size = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [buff_size];
     memcpy(buffer, tuple->tuple.cache_data + startOffset, buff_size);
-    /* Skip padding bytes. */
-//    while (*buffer == 0x00)
-//    {
-//        buffer++;
-//    }
     int64		timestamp,
             timestamp_sec;
     int32		jd,
@@ -130,7 +119,7 @@ void decode_timestamp_internal(CtidNode* tuple, int colSeq, uint32_t * offset, b
         return;
 
     memcpy(&timestamp, buffer + (buff_size - sizeof(timestamp)), sizeof(timestamp));
-//    timestamp = *(int64 *) buffer;
+    timestamp = *(int64 *) buffer;
 
     if (timestamp == DT_NOBEGIN)
     {
