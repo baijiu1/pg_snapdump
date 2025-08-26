@@ -220,10 +220,11 @@ int fetchRows(CtidNode* tuple) {
         }
 
         if (*offset >= tuple->tuple.tuple_length) {
-            printf(" 列读取完毕 \n");
+            printf(" 列读取完毕 ");
             break;
         }
     }
+    printf(" ctid(%d, %hu) \n", (tuple->tuple.self_ctid.ip_blkid.bi_hi << 16 | tuple->tuple.self_ctid.ip_blkid.bi_lo), tuple->tuple.self_ctid.ip_posid);
     delete offset;
 
 };
