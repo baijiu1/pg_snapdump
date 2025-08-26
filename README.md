@@ -67,7 +67,7 @@ SQL> update table_name set name = 'this name 2' where id = 2;
 SHELL> ./pg_snapdump -f /path/to/pgdata/base/16384/50000 
 id: 1 name: User_1 age: 108 class: 20 desc: This is a description for row 1  列读取完毕 ctid(0,1)
 id: 2 name: this name 2 age: 108 class: 20 desc: This is a description for row 2 列读取完毕 ctid(0,3)
-  -- id: 2 name: User_2 age: 108 class: 20 desc: This is a description for row 2 列读取完毕 ctid(0,2)
+  -- id: 2 name: User_2 age: 108 class: 20 desc: This is a description for row 2 列读取完毕 ctid(0,3)
 
 
 SHELL> ./pg_snapdump -f /path/to/pgdata/base/16384/50000 -o
