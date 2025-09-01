@@ -8,7 +8,7 @@
 #include "pg_class.h"
 #include "pg_attribute.h"
 #include "pg_data.h"
-#include <string>
+#include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <vector>

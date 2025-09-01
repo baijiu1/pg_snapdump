@@ -4,6 +4,43 @@
 
 #include "pg_type.h"
 
+#ifdef __cplusplus
+child_process_kind child_process_kinds[] = {
+        {"default", &decode_default},
+        {"smallint", &decode_smallint},
+        {"int", &decode_int},
+        {"bigint", &decode_bigint},
+        {"oid", &decode_oid},
+        {"numeric", &decode_numeric},
+        {"name", &decode_name},
+        {"float", &decode_float4},
+        {"double", &decode_float8},
+        {"varchar", &decode_string},
+        {"text", &decode_string},
+        {"bytea", &decode_string},
+        {"char", &decode_char},
+        {"bool", &decode_bool},
+        {"date", &decode_date},
+        {"time", &decode_time},
+        {"timestamp", &decode_timestamp},
+        {"bpchar", &decode_string},
+        {"timestamp with time zone", &decode_timetz},
+        {"interval", &decode_interval},
+        {"uuid", &decode_uuid},
+        {"inet", &decode_inet},
+        {"cidr", &decode_cidr},
+        {"macaddr", &decode_macaddr},
+        {"json", &decode_string},
+        {"xml", &decode_string},
+        {"jsonb", &decode_jsonb},
+        {"hstore", &decode_hstore},
+        {"int4range", &decode_int4range},
+        {"numrange", &decode_numrange},
+        {"tsrange", &decode_tsrange},
+        {"tstzrange", &decode_tstzrange},
+        {"daterange", &decode_daterange},
+};
+#else
 child_process_kind child_process_kinds[] = {
         [T_DEFAULT] = {"default", &decode_default},
         [T_SMALLINT] = {"smallint", &decode_smallint},
@@ -39,6 +76,7 @@ child_process_kind child_process_kinds[] = {
         [T_TSTZRANGE] = {"tstzrange", &decode_tstzrange},
         [T_DATERANGE] = {"daterange", &decode_daterange},
 };
+#endif
 
 int tupleFetchType(CtidNode* tuple, int colSeq, uint32_t * offset) {
     switch (tuple->tuple.column_type_id[colSeq]) {

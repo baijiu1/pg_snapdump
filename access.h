@@ -9,7 +9,7 @@
 #include "page.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <string>
+#include <cstring>
 #include <map>
 #include <vector>
 #include <dirent.h>

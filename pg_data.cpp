@@ -196,6 +196,9 @@ int fetchRows(CtidNode* tuple) {
     uint32_t * offset = new uint32_t;
     *offset = 0;
 
+    if (tuple->tuple.xmax != 0) {
+        printf("  --");
+    }
     for (int i = 0; i < tuple->tuple.tuple_nattrs; ++i) {
         if (onlyNewTuple) {
             if (tuple->tuple.xmax != 0) {
@@ -210,6 +213,7 @@ int fetchRows(CtidNode* tuple) {
                 tupleFetchType(tuple, i, offset);
             }
         } else {
+
             if (tuple->tuple.null_bit_map[i] == 0) {
                 printf(" %s: is null ", tuple->tuple.column_name[i].c_str());
                 // if null skip
