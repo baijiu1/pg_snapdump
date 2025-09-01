@@ -7,7 +7,6 @@
 #include <cstdio>
 #include <iostream>
 #include "pg_common.h"
-#include <cstring>
 
 using namespace std;
 

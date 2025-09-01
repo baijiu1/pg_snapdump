@@ -6,7 +6,7 @@
 #define PG_SNPDUMP_PG_TYPE_H
 
 #include <cstdlib>
-#include "cstring"
+#include "string"
 #include "cstdio"
 #include "pg_common.h"
 #include "pg_integer.h"
