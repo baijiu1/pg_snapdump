@@ -1,7 +1,7 @@
 # INTRODUCE
 
 
-[pg_snapdump](https://github.com/baijiu1/pg_snapdump) is tool of transform postgrelsql data file to data. It can be parse data files. pg_snapdump written with C/C++ is commonly used to learn data files and data recovery.
+[pg_snapdump](https://github.com/baijiu1/pg_snapdump) is tool of transform postgrelsql data file to data. It can be parse data files. pg_snapdump written with C/C++ is commonly used to learn postgresql data file construct and data record recovery.
 
 
 
@@ -11,11 +11,11 @@
 
 Security: as long as the file has **read** permission.
 
-Comprehensiveness: **all** column types in postgresql 9.x 10.x 11.x 12.x 13.x
+Comprehensiveness: **all** column types in postgresql 9.x 10.x 11.x 12.x 13.x, opengauss3.x 5.x 6.x, PanWeiDB
 
 Simple: compile execute file and do it without third-party dependencies.
 
-Useful: parse data with mark of deleted (--delete).
+Useful: parse data with mark of deleted.
 
 
 
