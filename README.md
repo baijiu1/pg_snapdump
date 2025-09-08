@@ -90,4 +90,4 @@ id: 2 name: this name 2 age: 108 class: 20 desc: This is a description for row 2
 
 require: gcc
 
-support range: postgresql/opengauss/磐维
+support range: postgresql/opengauss
