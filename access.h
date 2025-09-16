@@ -14,6 +14,9 @@
 #include <vector>
 #include <dirent.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
 
 using namespace std;
 

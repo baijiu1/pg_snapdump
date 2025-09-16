@@ -5,15 +5,17 @@
 #include "page.h"
 
 
-bool fetchPage(int fd, int pageNum, char* outPage) {
+bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
     void* PageHeap;
-    memset(outPage, 0, _PAGESIZE);
+    if (fd < 0 || outPage == nullptr) return false;
+    if (_PAGESIZE * pageNum >= fileSize) return false;
     PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * pageNum);
     if (PageHeap == MAP_FAILED) {
         perror("PageHeap mmap failed.");
-        close(fd);
+//        close(fd);
         return false;
     }
+    memset(outPage, 0, _PAGESIZE);
     memcpy(outPage, PageHeap, _PAGESIZE);
     munmap(PageHeap, _PAGESIZE);
     return true;
@@ -74,7 +76,7 @@ bool fetchPageData(char* pageData, int thisPageNum, const char * tableRelFileNod
 #elif defined(__linux__)
     processHalfPage(pageData, thisPageNum, tableRelFileNodeId, tableOid, mode);
 #endif
-
+    return true;
 };
 
 

@@ -13,6 +13,8 @@
 #include "pg_basic.h"
 #include <cassert>
 #include <sys/mman.h>
+#include <algorithm>
+#include <cstring>
 
 using namespace std;
 

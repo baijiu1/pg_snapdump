@@ -61,6 +61,7 @@ int getTableFileCount(char* oidOath, const char* oidName) {
 };
 
 int tableOnDiskOpen(const char* DBFilePath, int lockMode) {
+//    printf(" path: %s \n", DBFilePath);
     int fd = open(DBFilePath, O_RDONLY);
     if (fd == -1) {
         perror("Error opening file");
@@ -217,10 +218,16 @@ int InitAccessForProcessRecover(char* oid) {
     }
     strcat(path, "/pg_filenode.map");
     fd = tableOnDiskOpen(path, 10);
-    FilenodeMap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, 0);
+    struct stat st;
+    if (fstat(fd, &st) != 0) {
+        perror("fstat failed");
+        return -1;
+    }
+    size_t mapSize = st.st_size < _PAGESIZE ? st.st_size : _PAGESIZE;
+    FilenodeMap = mmap(nullptr, mapSize, PROT_READ, MAP_PRIVATE, fd, 0);
     fileNodeStream = new char[_PAGESIZE];
     memset(fileNodeStream, 0, _PAGESIZE);
-    memcpy(fileNodeStream, FilenodeMap, _PAGESIZE);
+    memcpy(fileNodeStream, FilenodeMap, mapSize);
     munmap(FilenodeMap, _PAGESIZE);
     tableOnDiskClose(fd, 10);
 
@@ -236,8 +243,11 @@ int InitAccessForProcessRecover(char* oid) {
     char pg_class_path[130];
     char buf[30];
     memcpy(pg_class_path, path, pathLen);
+    pg_class_path[pathLen] = '\0';
     snprintf(buf, sizeof(buf), "/%u", pgClassNode);
-    strcat(pg_class_path, buf);
+//    strcat(pg_class_path, buf);
+    snprintf(pg_class_path, sizeof(pg_class_path), "%.*s/%u", pathLen, path, pgClassNode);
+
     // pg_class
     fd = tableOnDiskOpen(pg_class_path, 10);
     findTableData(fd, tableRelFileNodeId, tableOid, 0);
@@ -300,6 +310,7 @@ int InitAccessForProcessRecover(char* oid) {
 //    }
     printAllCtidChain();
     delete tableOid;
+    return 1;
 //    delete tableRelFileNodeId;
 };
 
@@ -311,16 +322,15 @@ int findTableData(int fd, const char *tableRelFileNodeId, unsigned int* tableOid
     off_t fileSize = fetchFileTotalNum(fd, pageTotalNum);
     printf("\n共%d页\n", *pageTotalNum);
     for (int i = 0; *pageTotalNum == 1 ? i < *pageTotalNum : i <= *pageTotalNum; ++i) {
-//        printf("\n正在读取%d页", i);
-        if (i * 16384 >= fileSize) {
+//        printf("\n reading %d", i);
+        if (i * _PAGESIZE >= fileSize) {
             printf("\n读取完毕");
             return 0;
         }
-        fetchPage(fd, i, pageData);
+        fetchPage(fd, i, pageData, fileSize);
         fetchPageData(pageData, i, tableRelFileNodeId, tableOid, fileSize, mode);
     }
     delete pageTotalNum;
-    delete pageData;
+    delete[] pageData;
     return 0;
-
 };

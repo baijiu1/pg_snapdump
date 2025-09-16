@@ -37,7 +37,16 @@ const long osPagesize = sysconf(_SC_PAGE_SIZE);
 #ifdef __APPLE__
 #define LOGICAL_PAGE_SIZE (osPagesize / 2)
 #define _PAGESIZE osPagesize
-#elif defined(__linux__)
+
+#elif defined(__linux__) && defined(__aarch64__)
+#define LOGICAL_PAGE_SIZE (osPagesize)
+#define _PAGESIZE (osPagesize)
+
+#elif defined(__linux__) && defined(__x86_64__)
+#define LOGICAL_PAGE_SIZE (osPagesize * 2)
+#define _PAGESIZE (osPagesize * 2)
+
+#elif defined(__linux__) && defined(__i386__)
 #define LOGICAL_PAGE_SIZE (osPagesize * 2)
 #define _PAGESIZE (osPagesize * 2)
 #endif
@@ -449,7 +458,7 @@ TupleNode* reverseList(TupleNode* head);
 void reverseAllChains(std::vector<TupleNode*>& chains);
 //bool ItemPointerDataEqual(const ItemPointerData&, const ItemPointerData&);
 off_t fetchFileTotalNum(int fd, int* pageTotalNum);
-bool fetchPage(int fd, int pageNum, char* outPage);
+bool fetchPage(int fd, int pageNum, char* outPage, off_t);
 bool fetchPageData(char* pageData, int thisPageNum, const char *, unsigned int*, off_t, int);
 bool processHalfPage(char* halfPageData, int pageNum, const char *, unsigned int*, int);
 

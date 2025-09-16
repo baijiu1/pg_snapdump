@@ -64,6 +64,7 @@ int createParserApp(int argc, char* argv[]) {
             printf("  %s\n", argv[optind++]);
         }
     }
+    return 1;
 }
 
 char* get_program_name(char** args) {

@@ -3,7 +3,7 @@
 //
 
 #include "pg_bst.h"
-// 插入 BST（一次性构建）
+
 BSTNode* insertBST(BSTNode* root, size_t block_id, uint16_t offset, CtidNode* value) {
     if (!root) {
         BSTNode* node = (BSTNode*)malloc(sizeof(BSTNode));
@@ -21,7 +21,7 @@ BSTNode* insertBST(BSTNode* root, size_t block_id, uint16_t offset, CtidNode* va
     return root;
 }
 
-// 中序遍历 BST
+
 void inorderBST(BSTNode* root) {
     if (!root) return;
     inorderBST(root->left);

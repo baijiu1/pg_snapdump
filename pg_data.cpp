@@ -230,7 +230,7 @@ int fetchRows(CtidNode* tuple) {
     }
     printf(" ctid(%d, %hu) \n", (tuple->tuple.self_ctid.ip_blkid.bi_hi << 16 | tuple->tuple.self_ctid.ip_blkid.bi_lo), tuple->tuple.self_ctid.ip_posid);
     delete offset;
-
+    return 1;
 };
 
 int makeCtidBSTNode(ItemPointerData ctid, CtidNode* node, BSTTree* T) {
@@ -283,5 +283,6 @@ int printAllCtidChain() {
     }
 //    inorderWalk(T, T->root);
     printf("\n+++++++++++++++++\n");
+    return 1;
 }
 

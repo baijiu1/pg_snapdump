@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.23)
 project(pg_snapdump)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -6,6 +6,7 @@ add_compile_options(-g)      # 生成调试信息
 add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -g")
 
 
 #find_package(PostgreSQL REQUIRED)
