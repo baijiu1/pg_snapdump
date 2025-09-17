@@ -8,6 +8,7 @@
 
 #include "pg_common.h"
 #include "pg_type.h"
+#include "pg_log.h"
 #include "pg_data.h"
 #include "pg_bst.h"
 #include <cstdio>

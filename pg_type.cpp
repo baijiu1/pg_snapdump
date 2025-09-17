@@ -112,7 +112,6 @@ int tupleFetchType(CtidNode* tuple, int colSeq, uint32_t * offset) {
             break;
         case 18:
             child_process_kinds[T_CHAR].main_fn(tuple, colSeq, offset);
-            
             break;
         case 1043:
             child_process_kinds[T_VARCHAR].main_fn(tuple, colSeq, offset);

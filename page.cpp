@@ -79,7 +79,6 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
             } else if (mode == 1) {
                 resolvePgAttributeHeapData(tuple, tableOid, colAttr);
             } else if (mode == 2) {
-                // table data
                 resolveTableHeapTupleData(tuple, pageNum, colAttr, len, offset);
             }
             delete[] tuple;

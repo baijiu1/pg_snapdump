@@ -110,7 +110,6 @@ int resolveTableHeapTupleData(char* tuple, int thisPageNum, ColAttribute& colAtt
     chaseTuple.column_type_id = colAttr.colType;
     chaseTuple.colAttlen = colAttr.colAttlen;
     chaseTuple.colAttalign = colAttr.colAttalign;
-
     if (thisPageNum == currentTupleBlockId) {
         chaseTuple.tuple_length = len - t_hoff;
         chaseTuple.tuple_offset = tupleOffset;

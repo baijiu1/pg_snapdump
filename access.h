@@ -7,6 +7,7 @@
 #include "string"
 #include "pg_shm.h"
 #include "page.h"
+#include "pg_log.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <cstring>

@@ -3,6 +3,7 @@
 //
 
 #include "access.h"
+#include "pg_log.h"
 #include <getopt.h>
 
 using namespace std;
@@ -41,6 +42,7 @@ int createParserApp(int argc, char* argv[]) {
                 printVerbose();
                 break;
             case 'f':
+                LOG(LOG_LEVEL_INFO, "parser file: %s ", optarg);
                 InitAccessForProcessRecover(optarg);
                 break;
             case 'o':
@@ -91,35 +93,15 @@ int main(int argc, char* argv[]) {
     int pid = getpid();
 
     if (argc < 3) {
-        std::cerr << "Usage: " << argv[0] << " <command> <subcommand> [options] <name>" << std::endl;
+        LOG(LOG_LEVEL_FATAL, "Usage: %s [[-f /pgdata/data/base/16384/50000] [-o]]", argv[0]);
         return 1;
     }
-//    printf("Begin 当前时间: %02d:%02d:%02d\n",
-//           timenow->tm_hour,
-//           timenow->tm_min,
-//           timenow->tm_sec);
-//    FILE *fp = fopen("output.txt", "w");  // "w" 写模式，文件存在会清空
-//    if (fp == NULL) {
-//        perror("fopen failed");
-//        return 1;
-//    }
-
-//    fprintf(fp, "begin time: %02d:%02d:%02d",
-//            timenow->tm_hour,
-//            timenow->tm_min,
-//            timenow->tm_sec);
-//
+    LOG(LOG_LEVEL_INFO, "start program %s ", programName);
 
     createParserApp(argc, argv);
-    printf("Finish 当前时间: %02d:%02d:%02d\n",
-           timenow->tm_hour,
-           timenow->tm_min,
-           timenow->tm_sec);
-//    fprintf(fp, "end time: %02d:%02d:%02d",
-//            timenow->tm_hour,
-//            timenow->tm_min,
-//            timenow->tm_sec);
-//    fclose(fp);
+
+    LOG(LOG_LEVEL_INFO, "finish program %s ", programName);
+
     free(programName);
 }
 

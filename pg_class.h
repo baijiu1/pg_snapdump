@@ -6,6 +6,7 @@
 #define PG_SNPDUMP_PG_CLASS_H
 
 #include "pg_common.h"
+#include "pg_log.h"
 #include <iostream>
 #include <cstdio>
 

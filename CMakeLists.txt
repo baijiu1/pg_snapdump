@@ -7,6 +7,7 @@ add_compile_options(-fsanitize=address)
 add_link_options(-fsanitize=address)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -g")
+add_compile_definitions(LOG_LEVEL=1)
 
 
 #find_package(PostgreSQL REQUIRED)

@@ -7,6 +7,7 @@
 
 #include "pg_class.h"
 #include "pg_attribute.h"
+#include "pg_log.h"
 #include "pg_data.h"
 #include <cstring>
 #include <cstdio>

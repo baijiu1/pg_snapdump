@@ -29,7 +29,7 @@ static int starts_with(const char *name, const char *prefix) {
 int getTableFileCount(char* oidOath, const char* oidName) {
     DIR *dir = opendir(oidOath);
     if (!dir) {
-        perror("opendir");
+        LOG(LOG_LEVEL_FATAL, "open dir failed: %s", oidOath);
         return -1;
     }
 
@@ -38,7 +38,6 @@ int getTableFileCount(char* oidOath, const char* oidName) {
     char pathbuf[4096];
 
     while ((ent = readdir(dir)) != NULL) {
-        // 跳过 . 和 ..
         if (ent->d_name[0] == '.' &&
             (ent->d_name[1] == '\0' || (ent->d_name[1] == '.' && ent->d_name[2] == '\0')))
             continue;
@@ -46,7 +45,6 @@ int getTableFileCount(char* oidOath, const char* oidName) {
         if (!starts_with(ent->d_name, oidName))
             continue;
 
-        // 组合成完整路径
         int n = snprintf(pathbuf, sizeof(pathbuf), "%s/%s", oidOath, ent->d_name);
         if (n < 0 || n >= (int)sizeof(pathbuf)) continue;
 
@@ -61,10 +59,9 @@ int getTableFileCount(char* oidOath, const char* oidName) {
 };
 
 int tableOnDiskOpen(const char* DBFilePath, int lockMode) {
-//    printf(" path: %s \n", DBFilePath);
     int fd = open(DBFilePath, O_RDONLY);
     if (fd == -1) {
-        perror("Error opening file");
+        LOG(LOG_LEVEL_FATAL, "error open file: %s, exit...", DBFilePath);
         return -1;
     }
     return fd;
@@ -193,8 +190,6 @@ int process_files_concurrent(const char* basePath,
 
 
 int InitAccessForProcessRecover(char* oid) {
-
-//    size_t lastSlashPos = oid.find_last_of('/');
     int fd;
     void* FilenodeMap;
     char* fileNodeStream;
@@ -205,8 +200,6 @@ int InitAccessForProcessRecover(char* oid) {
     unsigned int* tableOid;
 
     tableOid = new unsigned int(0);
-//    tableRelFileNodeId = new char[100];
-
     const char *lastSlash = strrchr(oid, '/');
     path = new char[300];
     memset(path, 0, 300);
@@ -217,26 +210,31 @@ int InitAccessForProcessRecover(char* oid) {
         memcpy(path, oid, pathLen);
     }
     strcat(path, "/pg_filenode.map");
+    LOG(LOG_LEVEL_DEBUG, "open file %s ", path);
     fd = tableOnDiskOpen(path, 10);
     struct stat st;
     if (fstat(fd, &st) != 0) {
-        perror("fstat failed");
+        LOG(LOG_LEVEL_FATAL, "fstat file %s failed, exit... ", path);
         return -1;
     }
     size_t mapSize = st.st_size < _PAGESIZE ? st.st_size : _PAGESIZE;
+    LOG(LOG_LEVEL_DEBUG, "mmap file %s, file size: %zu ", path, mapSize);
     FilenodeMap = mmap(nullptr, mapSize, PROT_READ, MAP_PRIVATE, fd, 0);
     fileNodeStream = new char[_PAGESIZE];
     memset(fileNodeStream, 0, _PAGESIZE);
     memcpy(fileNodeStream, FilenodeMap, mapSize);
     munmap(FilenodeMap, _PAGESIZE);
     tableOnDiskClose(fd, 10);
+    LOG(LOG_LEVEL_DEBUG, "closed pg_filenode.map file %s ", path);
 
     RelFileNodeData fileNode = (RelFileNodeData) fileNodeStream;
     for (int i = 0; i < 60; ++i) {
         if (fileNode[i].rel_oid == 1259) {
             pgClassNode = fileNode[i].node_id;
+            LOG(LOG_LEVEL_DEBUG, "find pg_class oid: %d ", pgClassNode);
         } else if (fileNode[i].rel_oid == 1249) {
             pgAttributeNode = fileNode[i].node_id;
+            LOG(LOG_LEVEL_DEBUG, "find pg_attribute oid: %d ", pgAttributeNode);
         }
     }
     delete[] fileNodeStream;
@@ -246,38 +244,45 @@ int InitAccessForProcessRecover(char* oid) {
     memcpy(pg_class_path, path, pathLen);
     pg_class_path[pathLen] = '\0';
     snprintf(buf, sizeof(buf), "/%u", pgClassNode);
-//    strcat(pg_class_path, buf);
     snprintf(pg_class_path, sizeof(pg_class_path), "%.*s/%u", pathLen, path, pgClassNode);
+    LOG(LOG_LEVEL_DEBUG, "find pg_class path: %s ", pg_class_path);
 
-    // pg_class
+    LOG(LOG_LEVEL_DEBUG, "open pg_class data file %s ", pg_class_path);
     fd = tableOnDiskOpen(pg_class_path, 10);
+    LOG(LOG_LEVEL_DEBUG, "find table_oid from pg_class file: %s ", pg_class_path);
     findTableData(fd, tableRelFileNodeId, tableOid, 0);
+    if (*tableOid) {
+        LOG(LOG_LEVEL_DEBUG, "find table_oid: %d from pg_class data file: %s ", *tableOid, pg_class_path);
+    }
     tableOnDiskClose(fd, 100);
+    LOG(LOG_LEVEL_DEBUG, "closed pg_class data file %s ", pg_class_path);
 
-//    printf("\n-----\n");
-    // pg_attribute
+
     char pg_attribute_path[330];
     char buf1[30];
     memcpy(pg_attribute_path, path, pathLen);
     pg_attribute_path[pathLen] = '\0';
     snprintf(buf1, sizeof(buf1), "/%u", pgAttributeNode);
-//    strcat(pg_attribute_path, buf1);
     snprintf(pg_attribute_path, sizeof(pg_attribute_path), "%.*s/%u", pathLen, path, pgAttributeNode);
-    fd = tableOnDiskOpen(pg_attribute_path, 10);
-    findTableData(fd, "0", tableOid, 1);
+    LOG(LOG_LEVEL_DEBUG, "find pg_attribute path: %s ", pg_class_path);
 
-//    findTableAttribute(fd, tableOid);
+    LOG(LOG_LEVEL_DEBUG, "open pg_attribute data file %s ", pg_attribute_path);
+    fd = tableOnDiskOpen(pg_attribute_path, 10);
+    LOG(LOG_LEVEL_DEBUG, "find table attribute from pg_attribute data file: %s ", pg_attribute_path);
+    findTableData(fd, "0", tableOid, 1);
     tableOnDiskClose(fd, 100);
-//    printf("\n-----\n");
+    LOG(LOG_LEVEL_DEBUG, "closed pg_attribute data file %s ", pg_attribute_path);
+
     int groupSize1 = 10;
     int forkCount1 = (15 + groupSize1 - 1) / groupSize1;
-//    printf(" xxx ");
-    // table data
+
     char oid_path[300];
     memcpy(oid_path, path, pathLen);
     char* oidName = oid + pathLen + 1;
+    LOG(LOG_LEVEL_DEBUG, "get parser table data file count.");
     fileCount = getTableFileCount(oid_path, oidName);
-//    printf(" oid_path: %s %s ", oid_path, oidName);
+    LOG(LOG_LEVEL_DEBUG, "data file count: %d", fileCount);
+
 //    SharedCtidNodeVector* shmCtidBase = create_shared_vector(fileCount * 131072);
 
 //    if (parserAllFiles) {
@@ -306,9 +311,11 @@ int InitAccessForProcessRecover(char* oid) {
 //            }
 //        }
 //    } else {
+    LOG(LOG_LEVEL_DEBUG, "open parser table data file: %s.", oid);
         fd = tableOnDiskOpen(oid, 10);
         findTableData(fd, "1", nullptr, 2);
         tableOnDiskClose(fd, 100);
+    LOG(LOG_LEVEL_DEBUG, "closed parser table data file: %s.", oid);
 //    }
 //    printAllCtidChain();
     delete tableOid;
@@ -327,16 +334,15 @@ int findTableData(int fd, const char *tableRelFileNodeId, unsigned int* tableOid
 #endif
     pageTotalNum = new int(0);
     off_t fileSize = fetchFileTotalNum(fd, pageTotalNum);
+    LOG(LOG_LEVEL_DEBUG, "get data file page count: %lld.", fileSize);
 
-    printf("\n共%d页\n", *pageTotalNum);
 #if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     for (int i = 0; *pageTotalNum == 1 ? i < *pageTotalNum : i <= *pageTotalNum; ++i) {
 #elif defined(__linux__) && defined(__aarch64__)
         for (int i = 0; *pageTotalNum == 2 ? i < 1 : i <= (*pageTotalNum / 2); i += 2) {
 #endif
-//        printf("\n reading %d", i);
         if (i * _PAGESIZE >= fileSize) {
-            printf("\n读取完毕");
+            LOG(LOG_LEVEL_DEBUG, "finished reading data file page.");
             return 0;
         }
         fetchPage(fd, i, pageData, fileSize);
