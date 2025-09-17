@@ -212,7 +212,6 @@ int fetchRows(CtidNode* tuple) {
                 tupleFetchType(tuple, i, offset);
             }
         } else {
-
             if (tuple->tuple.null_bit_map[i] == 0) {
                 printf(" %s: is null ", tuple->tuple.column_name[i].c_str());
                 // if null skip
@@ -223,7 +222,7 @@ int fetchRows(CtidNode* tuple) {
         }
 
         if (*offset >= tuple->tuple.tuple_length) {
-            printf(" 列读取完毕 ");
+            printf("  Column read completed.");
             break;
         }
     }
