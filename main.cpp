@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 
     createParserApp(argc, argv);
 
-    LOG(LOG_LEVEL_INFO, "finish program %s ", programName);
+    LOG(LOG_LEVEL_INFO, "finish program %s. record context: ", programName);
 
     free(programName);
 }
