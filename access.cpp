@@ -205,7 +205,7 @@ int InitAccessForProcessRecover(char* oid) {
     unsigned int* tableOid;
 
     tableOid = new unsigned int(0);
-    tableRelFileNodeId = new char[100];
+//    tableRelFileNodeId = new char[100];
 
     const char *lastSlash = strrchr(oid, '/');
     path = new char[300];
@@ -239,6 +239,7 @@ int InitAccessForProcessRecover(char* oid) {
             pgAttributeNode = fileNode[i].node_id;
         }
     }
+    delete[] fileNodeStream;
 
     char pg_class_path[130];
     char buf[30];
@@ -251,7 +252,6 @@ int InitAccessForProcessRecover(char* oid) {
     // pg_class
     fd = tableOnDiskOpen(pg_class_path, 10);
     findTableData(fd, tableRelFileNodeId, tableOid, 0);
-//    findTableOid(tableRelFileNodeId, tableOid, fd);
     tableOnDiskClose(fd, 100);
 
 //    printf("\n-----\n");
@@ -259,8 +259,10 @@ int InitAccessForProcessRecover(char* oid) {
     char pg_attribute_path[330];
     char buf1[30];
     memcpy(pg_attribute_path, path, pathLen);
+    pg_attribute_path[pathLen] = '\0';
     snprintf(buf1, sizeof(buf1), "/%u", pgAttributeNode);
-    strcat(pg_attribute_path, buf1);
+//    strcat(pg_attribute_path, buf1);
+    snprintf(pg_attribute_path, sizeof(pg_attribute_path), "%.*s/%u", pathLen, path, pgAttributeNode);
     fd = tableOnDiskOpen(pg_attribute_path, 10);
     findTableData(fd, "0", tableOid, 1);
 
@@ -308,20 +310,30 @@ int InitAccessForProcessRecover(char* oid) {
         findTableData(fd, "1", nullptr, 2);
         tableOnDiskClose(fd, 100);
 //    }
-    printAllCtidChain();
+//    printAllCtidChain();
     delete tableOid;
+    delete[] path;
     return 1;
-//    delete tableRelFileNodeId;
+
 };
 
 int findTableData(int fd, const char *tableRelFileNodeId, unsigned int* tableOid, int mode){
     char* pageData;
     int* pageTotalNum;
+#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     pageData = new char[_PAGESIZE];
+#elif defined(__linux__) && defined(__aarch64__)
+    pageData = new char[_PAGESIZE * 2];
+#endif
     pageTotalNum = new int(0);
     off_t fileSize = fetchFileTotalNum(fd, pageTotalNum);
+
     printf("\n共%d页\n", *pageTotalNum);
+#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     for (int i = 0; *pageTotalNum == 1 ? i < *pageTotalNum : i <= *pageTotalNum; ++i) {
+#elif defined(__linux__) && defined(__aarch64__)
+        for (int i = 0; *pageTotalNum == 2 ? i < 1 : i <= (*pageTotalNum / 2); i += 2) {
+#endif
 //        printf("\n reading %d", i);
         if (i * _PAGESIZE >= fileSize) {
             printf("\n读取完毕");

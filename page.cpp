@@ -9,6 +9,8 @@ bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
     void* PageHeap;
     if (fd < 0 || outPage == nullptr) return false;
     if (_PAGESIZE * pageNum >= fileSize) return false;
+
+#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * pageNum);
     if (PageHeap == MAP_FAILED) {
         perror("PageHeap mmap failed.");
@@ -18,13 +20,38 @@ bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
     memset(outPage, 0, _PAGESIZE);
     memcpy(outPage, PageHeap, _PAGESIZE);
     munmap(PageHeap, _PAGESIZE);
+#elif defined(__linux__) && defined(__aarch64__)
+    PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * pageNum);
+    if (PageHeap == MAP_FAILED) {
+        perror("PageHeap mmap failed.");
+//        close(fd);
+        return false;
+    }
+    memset(outPage, 0, _PAGESIZE * 2);
+    memcpy(outPage, PageHeap, _PAGESIZE);
+    munmap(PageHeap, _PAGESIZE);
+
+    PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * (pageNum + 1));
+    if (PageHeap == MAP_FAILED) {
+        perror("PageHeap mmap failed.");
+//        close(fd);
+        return false;
+    }
+    memcpy(outPage + _PAGESIZE, PageHeap, _PAGESIZE);
+    munmap(PageHeap, _PAGESIZE);
+#endif
+
     return true;
 }
 
 off_t fetchFileTotalNum(int fd, int* pageTotalNum) {
     off_t fileSize = lseek(fd, 0, SEEK_END);
     if (fileSize == 8192) {
+#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
         *pageTotalNum = 1; // 有多少页
+#elif defined(__linux__) && defined(__aarch64__)
+        *pageTotalNum = 2; // 有多少页
+#endif
     } else {
         *pageTotalNum = fileSize / _PAGESIZE;
     }
@@ -41,7 +68,7 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
             uint16_t len = items[i].lp_len;
             uint16_t offset = items[i].lp_off;
             uint16_t flags = items[i].lp_flags;
-            if (len == 0) continue;
+            if ((len == 0) || (len >= 8192)) continue;
             if (offset >= 8192) continue;
             char* tuple = new char[len + 1];
 //            printf(" f: %d ", offset);
@@ -55,6 +82,7 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
                 // table data
                 resolveTableHeapTupleData(tuple, pageNum, colAttr, len, offset);
             }
+            delete[] tuple;
         }
     }
     return true;

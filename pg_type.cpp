@@ -4,9 +4,8 @@
 
 #include "pg_type.h"
 
-#ifdef defined(__linux__)
+#if defined(__linux__)
 child_process_kind child_process_kinds[] = {
-        {"default", &decode_default},
         {"smallint", &decode_smallint},
         {"int", &decode_int},
         {"bigint", &decode_bigint},
@@ -39,6 +38,7 @@ child_process_kind child_process_kinds[] = {
         {"tsrange", &decode_tsrange},
         {"tstzrange", &decode_tstzrange},
         {"daterange", &decode_daterange},
+        {"default", &decode_default},
 };
 #elif defined(__APPLE__)
 child_process_kind child_process_kinds[] = {

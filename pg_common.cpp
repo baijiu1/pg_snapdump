@@ -218,7 +218,7 @@ int CopyAppendEncode(const unsigned char *str, int orig_len)
 
     tmp_buff[curr_offset] = '\0';
     CopyAppend(tmp_buff);
-    free(tmp_buff);
+    delete[] tmp_buff;
 
     return 0;
 }

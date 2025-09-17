@@ -95,7 +95,7 @@ int resolveTableHeapTupleData(char* tuple, int thisPageNum, ColAttribute& colAtt
             }
         }
     }
-    delete t_bits;
+    delete[] t_bits;
     // sort for colAttr.colAttnum
     sort_with_sync(colAttr.colAttNum, colAttr.colName, colAttr.colType, colAttr.colAttalign, colAttr.colAttlen);
     chaseTuple.self_ctid.ip_blkid.bi_hi = ctid.ip_blkid.bi_hi;
