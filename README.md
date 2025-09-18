@@ -30,6 +30,7 @@ Useful: parse data with mark of deleted.
 **Linux**
 
 ```shell
+cd pg_snapdump/
 cmake .
 make
 cd bin/
@@ -38,6 +39,7 @@ cd bin/
 **MacOS**
 
 ```shell
+cd pg_snapdump/
 cmake .
 make
 cd bin/
