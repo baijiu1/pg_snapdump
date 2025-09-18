@@ -1,5 +1,6 @@
 # INTRODUCE
 
+[中文版介绍](https://github.com/baijiu1/pg_snapdump/blob/main/README_zh.md)
 
 [pg_snapdump](https://github.com/baijiu1/pg_snapdump) is tool of transform postgrelsql data file to data. It can be parse data files. pg_snapdump written with C/C++ is commonly used to learn postgresql data file construct and data record recovery.
 
