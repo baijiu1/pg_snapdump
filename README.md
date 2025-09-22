@@ -27,7 +27,7 @@ Useful: parse data with mark of deleted.
 
 ## compile
 
-**Linux**
+**Linux ARM**
 
 ```shell
 cd pg_snapdump/
@@ -36,7 +36,7 @@ make
 cd bin/
 ```
 
-**MacOS**
+**MacOS M1**
 
 ```shell
 cd pg_snapdump/
