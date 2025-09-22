@@ -10,7 +10,7 @@ bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
     if (fd < 0 || outPage == nullptr) return false;
     if (_PAGESIZE * pageNum >= fileSize) return false;
 
-#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
+#if defined(__APPLE__)
     PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * pageNum);
     if (PageHeap == MAP_FAILED) {
         perror("PageHeap mmap failed.");
@@ -20,7 +20,7 @@ bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
     memset(outPage, 0, _PAGESIZE);
     memcpy(outPage, PageHeap, _PAGESIZE);
     munmap(PageHeap, _PAGESIZE);
-#elif defined(__linux__) && defined(__aarch64__)
+#elif (defined(__linux__) && defined(__aarch64__)) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     PageHeap = mmap(nullptr, _PAGESIZE, PROT_READ, MAP_PRIVATE, fd, _PAGESIZE * pageNum);
     if (PageHeap == MAP_FAILED) {
         perror("PageHeap mmap failed.");
@@ -47,9 +47,9 @@ bool fetchPage(int fd, int pageNum, char* outPage, off_t fileSize) {
 off_t fetchFileTotalNum(int fd, int* pageTotalNum) {
     off_t fileSize = lseek(fd, 0, SEEK_END);
     if (fileSize == 8192) {
-#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
+#if defined(__APPLE__)
         *pageTotalNum = 1; // 有多少页
-#elif defined(__linux__) && defined(__aarch64__)
+#elif (defined(__linux__) && defined(__aarch64__)) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
         *pageTotalNum = 2; // 有多少页
 #endif
     } else {

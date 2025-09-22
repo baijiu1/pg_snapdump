@@ -42,6 +42,10 @@ int createParserApp(int argc, char* argv[]) {
                 printVerbose();
                 break;
             case 'f':
+                if (optarg[0] != '/') {
+                    LOG(LOG_LEVEL_FATAL, "input file path must be absolute path, exit...");
+                    exit(1);
+                }
                 LOG(LOG_LEVEL_INFO, "parser file: %s ", optarg);
                 InitAccessForProcessRecover(optarg);
                 break;
@@ -53,7 +57,8 @@ int createParserApp(int argc, char* argv[]) {
                 break;
             case '?': // 未知选项
                 // getopt_long 自动打印错误信息
-                printf("\n unknown command. please input correct command. ");
+                LOG(LOG_LEVEL_FATAL, "unknown command. please input correct command."
+                                     "Usage: %s [[-f /pgdata/data/base/16384/50000] [-o]]", argv[0]);
                 exit(1);
             default:
                 break;
@@ -83,12 +88,7 @@ char* get_program_name(char** args) {
 }
 
 int main(int argc, char* argv[]) {
-    struct tm *timenow;
-    time_t now;
-    time(&now);
-    timenow = localtime(&now);
     char** args = argv;
-    int arg = argc;
     char* programName = get_program_name(args);
     int pid = getpid();
 
@@ -96,11 +96,11 @@ int main(int argc, char* argv[]) {
         LOG(LOG_LEVEL_FATAL, "Usage: %s [[-f /pgdata/data/base/16384/50000] [-o]]", argv[0]);
         return 1;
     }
-    LOG(LOG_LEVEL_INFO, "start program %s ", programName);
+    LOG(LOG_LEVEL_INFO, "start program %s pid: %d execute path: %s ", programName, pid, argv[0]);
 
     createParserApp(argc, argv);
 
-    LOG(LOG_LEVEL_INFO, "finish program %s. record context: ", programName);
+    LOG(LOG_LEVEL_INFO, "finished program %s pid: %d.", programName, pid);
 
     free(programName);
 }

@@ -783,13 +783,15 @@ int extract_data(const unsigned char *buffer, int (*parse_value)(const unsigned 
             printf("WARNING: Corrupted toast data, unable to decompress.\n");
             CopyAppend("(inline compressed, corrupted)");
 //            *out_size = padding + len;
-            free(decompress_tmp_buff);
+            delete[] decompress_tmp_buff;
+//            free(decompress_tmp_buff);
             return 0;
         }
 
         result = parse_value((unsigned char*)decompress_tmp_buff, decompressed_len);
 //        *out_size = padding + len;
-        free(decompress_tmp_buff);
+//        free(decompress_tmp_buff);
+        delete[] decompress_tmp_buff;
         return result;
     }
 

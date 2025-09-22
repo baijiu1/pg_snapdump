@@ -327,18 +327,18 @@ int InitAccessForProcessRecover(char* oid) {
 int findTableData(int fd, const char *tableRelFileNodeId, unsigned int* tableOid, int mode){
     char* pageData;
     int* pageTotalNum;
-#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
+#if defined(__APPLE__)
     pageData = new char[_PAGESIZE];
-#elif defined(__linux__) && defined(__aarch64__)
+#elif (defined(__linux__) && defined(__aarch64__)) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
     pageData = new char[_PAGESIZE * 2];
 #endif
     pageTotalNum = new int(0);
     off_t fileSize = fetchFileTotalNum(fd, pageTotalNum);
     LOG(LOG_LEVEL_DEBUG, "get data file page count: %lld.", fileSize);
 
-#if defined(__APPLE__) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
+#if defined(__APPLE__)
     for (int i = 0; *pageTotalNum == 1 ? i < *pageTotalNum : i <= *pageTotalNum; ++i) {
-#elif defined(__linux__) && defined(__aarch64__)
+#elif (defined(__linux__) && defined(__aarch64__)) || (defined(__linux__) && defined(__x86_64__)) || (defined(__linux__) && defined(__i386__))
         for (int i = 0; *pageTotalNum == 2 ? i < 1 : i <= (*pageTotalNum / 2); i += 2) {
 #endif
         if (i * _PAGESIZE >= fileSize) {
