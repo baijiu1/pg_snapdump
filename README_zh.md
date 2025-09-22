@@ -1,31 +1,25 @@
-# INTRODUCE
+# 指引
 
-[中文版介绍](https://github.com/baijiu1/pg_snapdump/blob/main/README_zh.md)
+[英文版介绍](https://github.com/baijiu1/pg_snapdump/blob/main/README.md)
 
-[pg_snapdump](https://github.com/baijiu1/pg_snapdump) is tool of transform postgrelsql data file to data. It can be parse data files. pg_snapdump written with C/C++ is commonly used to learn postgresql data file construct and data record recovery.
-
-
-
-# FEATURE
-
-~~Simple and useful !~~
-
-Security: as long as the file has **read** permission.
-
-Comprehensiveness: **all** column types in postgresql 9.x 10.x 11.x 12.x 13.x, opengauss3.x 5.x 6.x, PanWeiDB
-
-Simple: compile execute file and do it without third-party dependencies.
-
-Useful: parse data with mark of deleted.
+[pg_snapdump](https://github.com/baijiu1/pg_snapdump) 是一款数据恢复的工具。 它可以直接从postgresql/opengauss的底层数据文件中解析出明文数据。pg_snapdump用C/C++编写，为学习postgresql的数据文件格式、数据恢复等提供帮助。
 
 
 
+# 特性
+
+安全： 只需要简单的读取权限
+
+全面： 支持postgresql 9.x/10.x/11.x/12.x/13.x，openguass 3.x/5.x/6.x的数据文件解析
+
+简单： 编译不需要依赖任何第三方库
+
+实用： 可以直接解析数据文件中的mvcc老版本数据，在vacuum之前
 
 
-# USAGE
+# 使用方式
 
-
-## compile
+## 编译
 
 **Linux**
 
@@ -45,7 +39,7 @@ make
 cd bin/
 ```
 
-## usage
+## 执行
 
 **Linux**
 
@@ -60,9 +54,7 @@ cd bin/
 ```
 
 
-# Example
-
-env linux:
+# 示例
 
 ```shell
 SQL> update table_name set name = 'this name 2' where id = 2;
