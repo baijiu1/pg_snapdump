@@ -152,9 +152,14 @@ CopyAppend(const char *str)
         appendStringInfoString(&copyString, "\t");
 
     appendStringInfoString(&copyString, str);
+#if defined(__APPLE__)
     char* result = strdup(str);
     printf(" %s ", result);
     return result;
+#elif defined(__linux__)
+    printf(" %s ", copyString.data);
+    return copyString.data;
+#endif
 }
 
 int CopyAppendEncode(const unsigned char *str, int orig_len)

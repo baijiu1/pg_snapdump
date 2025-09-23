@@ -79,7 +79,13 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
             } else if (mode == 1) {
                 resolvePgAttributeHeapData(tuple, tableOid, colAttr);
             } else if (mode == 2) {
-                resolveTableHeapTupleData(tuple, pageNum, colAttr, len, offset);
+                if (!colAttr.colName.empty()) {
+                    resolveTableHeapTupleData(tuple, pageNum, colAttr, len, offset);
+                } else {
+                    LOG(LOG_LEVEL_FATAL, "resolve pg_attribute column attr failed. exit...");
+                    exit(1);
+                }
+
             }
             delete[] tuple;
         }

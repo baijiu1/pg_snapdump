@@ -30,5 +30,5 @@ int resolvePgAttributeHeapData(char* tuple, unsigned int* tableOid, ColAttribute
                 colAttr.colAttalign.emplace_back(pgAttributeData->attalign);
         }
     }
-    return 0;
+    return 1;
 };

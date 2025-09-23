@@ -6,12 +6,14 @@
 
 void decode_bool(CtidNode* tuple, int colSeq, uint32_t * offset){
     char* buffer = tuple->tuple.cache_data + *offset;
+    LOG(LOG_LEVEL_DEBUG, "bool: start offset = %d, column sequence = %d", *offset, colSeq);
     CopyAppend(*(bool *) buffer ? "t" : "f");
     *offset += 1;
 };
 
 void decode_uuid(CtidNode* tuple, int colSeq, uint32_t * offset){
     unsigned char uuid[16];
+    LOG(LOG_LEVEL_DEBUG, "uuid: start offset = %d, sizeof(uuid) = %lu, column sequence = %d", *offset, sizeof(uuid), colSeq);
     memcpy(uuid, tuple->tuple.cache_data + *offset, sizeof(uuid));
     CopyAppendFmt("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
                   uuid[0], uuid[1], uuid[2], uuid[3], uuid[4], uuid[5], uuid[6], uuid[7],
@@ -21,23 +23,26 @@ void decode_uuid(CtidNode* tuple, int colSeq, uint32_t * offset){
 
 void decode_string(CtidNode* tuple, int colSeq, uint32_t * offset){
     unsigned char* buffer = (unsigned char*)tuple->tuple.cache_data + *offset;
+    LOG(LOG_LEVEL_DEBUG, "string: start offset = %d, column sequence = %d", *offset, colSeq);
     extract_data(buffer, &CopyAppendEncode, tuple, colSeq, offset);
 };
 
 void decode_char(CtidNode* tuple, int colSeq, uint32_t * offset){
     unsigned char *buffer = (unsigned char *)tuple->tuple.cache_data + *offset;
+    LOG(LOG_LEVEL_DEBUG, "char: start offset = %d, column sequence = %d", *offset, colSeq);
     CopyAppendEncode(buffer, 1);
     *offset += 1;
 };
 
 void decode_name(CtidNode* tuple, int colSeq, uint32_t * offset){
     unsigned char* buffer = (unsigned char *)tuple->tuple.cache_data + *offset;
+    LOG(LOG_LEVEL_DEBUG, "name: start offset = %d, column sequence = %d", *offset, colSeq);
     CopyAppendEncode(buffer, strnlen((char*)buffer, NAMEDATALEN));
     *offset += NAMEDATALEN;
 };
 
 void decode_json(CtidNode* tuple, int colSeq, uint32_t * offset){
-
+    LOG(LOG_LEVEL_DEBUG, "json: start offset = %d, column sequence = %d", *offset, colSeq);
 };
 
 void decode_jsonb(CtidNode* tuple, int colSeq, uint32_t * offset){

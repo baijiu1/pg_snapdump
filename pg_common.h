@@ -215,11 +215,30 @@ char* CopyAppend(const char *str);
 int CopyAppendEncode(const unsigned char *str, int orig_len);
 
 #define MaxAllocSize	((int) 0x3fffffff) /* 1 gigabyte - 1 */
+
+#if defined(__APPLE__)
 #define CopyAppendFmt(fmt, ...) do { \
 	  char __copy_format_buff[512]; \
 	  snprintf(__copy_format_buff, sizeof(__copy_format_buff), fmt, ##__VA_ARGS__); \
 	  CopyAppend(__copy_format_buff); \
   } while(0)
+#elif defined(__linux__)
+#include <stdarg.h>
+#include <stdio.h>
+void CopyAppendFmt(const char *fmt, ...)
+{
+    char buf[512];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    va_end(args);
+
+    CopyAppend(buf);  // 保持和原逻辑一致
+}
+#else
+#error "Unsupported platform: CopyAppendFmt not defined"
+#endif
+
 #define MAXDATELEN 128
 
 #ifdef __cplusplus

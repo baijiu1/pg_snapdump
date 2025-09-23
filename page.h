@@ -44,12 +44,12 @@ const long osPagesize = sysconf(_SC_PAGE_SIZE);
 #define _PAGESIZE (osPagesize)
 
 #elif defined(__linux__) && defined(__x86_64__)
-#define LOGICAL_PAGE_SIZE (osPagesize * 2)
-#define _PAGESIZE (osPagesize * 2)
+#define LOGICAL_PAGE_SIZE (osPagesize)
+#define _PAGESIZE (osPagesize)
 
 #elif defined(__linux__) && defined(__i386__)
-#define LOGICAL_PAGE_SIZE (osPagesize * 2)
-#define _PAGESIZE (osPagesize * 2)
+#define LOGICAL_PAGE_SIZE (osPagesize)
+#define _PAGESIZE (osPagesize)
 #endif
 
 

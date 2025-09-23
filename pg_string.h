@@ -9,6 +9,8 @@
 #include <iostream>
 #include <cstdlib>
 #include "pg_common.h"
+#include "pg_log.h"
+
 using namespace std;
 
 void decode_bool(CtidNode* tuple, int, uint32_t *);

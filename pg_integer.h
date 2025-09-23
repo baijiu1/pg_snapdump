@@ -8,6 +8,7 @@
 #include "cstdlib"
 #include "cstdio"
 #include "pg_common.h"
+#include "pg_log.h"
 
 using namespace std;
 

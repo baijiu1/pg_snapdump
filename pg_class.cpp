@@ -15,7 +15,7 @@ int resolvePgClassHeapData(char* tuple, const char* tableRelFileNodeId, unsigned
     char* t_data = tuple + tup->t_hoff;
     Form_pg_class pgClassData = (Form_pg_class) t_data;
     if (pgClassData->relfilenode == stoi(tableRelFileNodeId) && tup->t_choice.t_heap.t_xmax == 0) {
-        LOG(LOG_LEVEL_DEBUG, "finished find table oid from pg_class data file.");
+        LOG(LOG_LEVEL_DEBUG, "finished find table oid from pg_class data file. resolve table: %s ", pgClassData->relname.data);
         *tableOid = pgClassData->oid;
         return 0;
     }

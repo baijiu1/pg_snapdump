@@ -8,6 +8,7 @@ void decode_smallint(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "smallint: start offset = %d, end offset = %zu, sizeof(int16) = %lu, column sequence = %d", startOffset, off, sizeof(int16), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int16)), off);
     CopyAppendFmt("%d", *(int16 *) buffer);
     delete[] buffer;
@@ -17,6 +18,7 @@ void decode_int(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "lint: start offset = %d, end offset = %zu, sizeof(int32) = %lu, column sequence = %d", startOffset, off, sizeof(int32), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int32)), off);
     CopyAppendFmt("%d", *(int32 *) buffer);
     delete[] buffer;
@@ -26,6 +28,7 @@ void decode_uint(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "uint: start offset = %d, end offset = %zu, sizeof(int32) = %lu, column sequence = %d", startOffset, off, sizeof(int32), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset, off);
     CopyAppendFmt("%d", *(int32 *) buffer);
     delete[] buffer;
@@ -35,6 +38,7 @@ void decode_bigint(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "bigint: start offset = %d, end offset = %zu, sizeof(int64) = %lu, column sequence = %d", startOffset, off, sizeof(int64), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int64)) , off);
     CopyAppendFmt(INT64_FORMAT, *(int64 *) buffer);
     delete[] buffer;
@@ -48,6 +52,7 @@ void decode_float4(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "float4: start offset = %d, end offset = %zu, sizeof(int32) = %lu, column sequence = %d", startOffset, off, sizeof(int32), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int32)), off);
     CopyAppendFmt("%.12f", *(float *) buffer);
     delete[] buffer;
@@ -57,6 +62,7 @@ void decode_float8(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
+    LOG(LOG_LEVEL_DEBUG, "float8: start offset = %d, end offset = %zu, sizeof(int64) = %lu, column sequence = %d", startOffset, off, sizeof(int64), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int64)), off);
     CopyAppendFmt("%.12lf", *(double *) buffer);
     delete[] buffer;
@@ -64,6 +70,7 @@ void decode_float8(CtidNode* tuple, int colSeq, uint32_t * offset){
 
 void decode_numeric(CtidNode* tuple, int colSeq, uint32_t * offset){
     unsigned char* buffer = (unsigned char*)tuple->tuple.cache_data + *offset;
+    LOG(LOG_LEVEL_DEBUG, "numeric: start offset = %d, column sequence = %d", *offset, colSeq);
     extract_data(buffer, &CopyAppendNumeric, tuple, colSeq, offset);
 };
 
