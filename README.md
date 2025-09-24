@@ -12,7 +12,7 @@
 
 Security: as long as the file has **read** permission.
 
-Comprehensiveness: **all** column types in postgresql 9.x 10.x 11.x 12.x 13.x, opengauss3.x 5.x 6.x, PanWeiDB
+Comprehensiveness: **all** column types in postgresql 9.x 10.x 11.x 12.x 13.x 14.x 15.x 16.x 17.x 18.x, opengauss3.x 5.x 6.x
 
 Simple: compile execute file and do it without third-party dependencies.
 
@@ -27,7 +27,7 @@ Useful: parse data with mark of deleted.
 
 ## compile
 
-**Linux**
+**Linux/MacOS**
 
 1. configure PG_VERSION_NUM in pg_config.h to match your postgresql/opengauss version, default postgresql 17.2.
 ```c
@@ -37,40 +37,15 @@ vim pg_config.h
 ```
 
 2. configure log level for more detail info, default INFO.
+```c
 // log level
 #define LOG_LEVEL_DEBUG 0
 #define LOG_LEVEL_INFO  1
 #define LOG_LEVEL_WARN  2
 #define LOG_LEVEL_ERROR 3
 #define LOG_LEVEL_FATAL 3
-```c
-vim CMakeList.txt
-add_compile_definitions(LOG_LEVEL=1)
 ```
 
-3. compile
-```shell
-cmake .
-make
-cd bin/
-```
-
-**MacOS**
-
-1. configure PG_VERSION_NUM in pg_config.h to match your postgresql/opengauss version.
-```c
-cd pg_snapdump/
-vim pg_config.h
-647 #define PG_VERSION_NUM 170002
-```
-
-2. configure log level for more detail info, default INFO.
-// log level
-#define LOG_LEVEL_DEBUG 0
-#define LOG_LEVEL_INFO  1
-#define LOG_LEVEL_WARN  2
-#define LOG_LEVEL_ERROR 3
-#define LOG_LEVEL_FATAL 3
 ```c
 vim CMakeList.txt
 add_compile_definitions(LOG_LEVEL=1)
@@ -85,18 +60,11 @@ cd bin/
 
 ## usage
 
-**Linux**
+**Linux/MacOS**
 
 ```shell
 ./pg_snapdump [[-f /pgdata/data/base/16384/50000] [-o]]
 ```
-
-**MacOS**
-
-```shell
-./pg_snapdump [[-f /pgdata/data/base/16384/50000] [-o]]
-```
-
 
 # Example
 
