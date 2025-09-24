@@ -5,6 +5,7 @@
 #ifndef PG_SNAPDUMP_PG_COMMON_H
 #define PG_SNAPDUMP_PG_COMMON_H
 
+#include "pg_log.h"
 #include <cstdio>
 #include <iostream>
 #include <cstdlib>
@@ -225,16 +226,7 @@ int CopyAppendEncode(const unsigned char *str, int orig_len);
 #elif defined(__linux__)
 #include <stdarg.h>
 #include <stdio.h>
-void CopyAppendFmt(const char *fmt, ...)
-{
-    char buf[512];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buf, sizeof(buf), fmt, args);
-    va_end(args);
-
-    CopyAppend(buf);  // 保持和原逻辑一致
-}
+void CopyAppendFmt(const char *fmt, ...);
 #else
 #error "Unsupported platform: CopyAppendFmt not defined"
 #endif

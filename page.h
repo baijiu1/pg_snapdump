@@ -256,7 +256,7 @@ typedef struct PageHeaderData
     LocationIndex pd_lower;		/* offset to start of free space */
     LocationIndex pd_upper;		/* offset to end of free space */
     LocationIndex pd_special;	/* offset to start of special space */
-    uint16_t		pd_pagesize_version;
+    uint16_t		pd_pagesize_version; /* 15有attstattarget字段，以上没有*/
     TransactionId pd_prune_xid; /* oldest prunable XID, or zero if none */
     PdItemIdData	pd_linp[FLEXIBLE_ARRAY_MEMBER]; /* line pointer array */
 } PageHeaderData;

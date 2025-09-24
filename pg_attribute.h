@@ -32,6 +32,9 @@ typedef struct {
  * table are.
  */
     Oid			atttypid ;
+#if PG_VERSION_NUM <= 150002
+    int32		attstattarget;
+#endif
 
 /*
  * attlen is a copy of the typlen field from pg_type for this attribute.

@@ -12,10 +12,13 @@ size_t computeAttAlign(uint32_t& offset, CtidNode*& tuple, int colSeq) {
     uint32 startOffset = offset;
     if (tuple->tuple.colAttlen[colSeq] == -1) {
         offset = att_align_pointer(offset, tuple->tuple.colAttalign[colSeq], tuple->tuple.colAttlen[colSeq], tuple->tuple.cache_data + offset);
+        LOG(LOG_LEVEL_DEBUG, "align for string: compute offset = %d attalign: %d attlen: %d ", offset, tuple->tuple.colAttalign[colSeq], tuple->tuple.colAttlen[colSeq]);
     } else {
         offset = att_align_nominal(offset, tuple->tuple.colAttalign[colSeq]);
+        LOG(LOG_LEVEL_DEBUG, "align for nominal: compute offset = %d attalign: %d attlen: %d ", offset, tuple->tuple.colAttalign[colSeq], tuple->tuple.colAttlen[colSeq]);
     }
     offset = att_addlength_pointer(offset, tuple->tuple.colAttlen[colSeq], tuple->tuple.cache_data + offset);
+    LOG(LOG_LEVEL_DEBUG, "align for add length pointer: compute offset = %d ", offset);
     return offset - startOffset;
 };
 
@@ -776,7 +779,7 @@ int extract_data(const unsigned char *buffer, int (*parse_value)(const unsigned 
 #else /* PG_VERSION_NUM < 140000 */
 #if PG_VERSION_NUM >= 120000
         decompress_ret = pglz_decompress(VARDATA_4B_C(buffer), len - 2 * sizeof(uint32),
-                                         decompress_tmp_buff, decompressed_len, true)
+                                         decompress_tmp_buff, decompressed_len, true);
 #else
         decompress_ret = pglz_decompress(VARDATA_4B_C(buffer), len - 2 * sizeof(uint32),
         decompress_tmp_buff, decompressed_len);
