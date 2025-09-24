@@ -8,6 +8,19 @@
 
 using namespace std;
 
+#if defined(__linux__)
+void CopyAppendFmt(const char *fmt, ...)
+{
+    char buf[512];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    va_end(args);
+
+    CopyAppend(buf);
+}
+#endif
+
 size_t computeAttAlign(uint32_t& offset, CtidNode*& tuple, int colSeq) {
     uint32 startOffset = offset;
     if (tuple->tuple.colAttlen[colSeq] == -1) {
@@ -155,14 +168,14 @@ CopyAppend(const char *str)
         appendStringInfoString(&copyString, "\t");
 
     appendStringInfoString(&copyString, str);
-#if defined(__APPLE__)
+//#if defined(__APPLE__) || (defined(__linux__) && defined(__arm64__))
     char* result = strdup(str);
     printf(" %s ", result);
     return result;
-#elif defined(__linux__)
-    printf(" %s ", copyString.data);
-    return copyString.data;
-#endif
+//#elif (defined(__linux__) && defined(__x86_64__))
+//    printf(" %s ", copyString.data);
+//    return copyString.data;
+//#endif
 }
 
 int CopyAppendEncode(const unsigned char *str, int orig_len)

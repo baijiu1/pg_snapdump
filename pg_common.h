@@ -219,9 +219,9 @@ int CopyAppendEncode(const unsigned char *str, int orig_len);
 
 #if defined(__APPLE__)
 #define CopyAppendFmt(fmt, ...) do { \
-	  char __copy_format_buff[512]; \
-	  snprintf(__copy_format_buff, sizeof(__copy_format_buff), fmt, ##__VA_ARGS__); \
-	  CopyAppend(__copy_format_buff); \
+          char __copy_format_buff[512]; \
+          snprintf(__copy_format_buff, sizeof(__copy_format_buff), fmt, ##__VA_ARGS__); \
+          CopyAppend(__copy_format_buff); \
   } while(0)
 #elif defined(__linux__)
 #include <stdarg.h>

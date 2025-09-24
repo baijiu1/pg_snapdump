@@ -18,7 +18,7 @@ void decode_int(CtidNode* tuple, int colSeq, uint32_t * offset){
     uint32 startOffset = *offset;
     size_t off = computeAttAlign(*offset, tuple, colSeq);
     char* buffer = new char [512];
-    LOG(LOG_LEVEL_DEBUG, "lint: start offset = %d, end offset = %zu, sizeof(int32) = %lu, column sequence = %d", startOffset, off, sizeof(int32), colSeq);
+    LOG(LOG_LEVEL_DEBUG, "int: start offset = %d, end offset = %zu, sizeof(int32) = %lu, column sequence = %d", startOffset, off, sizeof(int32), colSeq);
     memcpy(buffer, tuple->tuple.cache_data + startOffset + (off - sizeof(int32)), off);
     CopyAppendFmt("%d", *(int32 *) buffer);
     delete[] buffer;

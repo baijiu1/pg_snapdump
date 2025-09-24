@@ -71,7 +71,7 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
             if ((len == 0) || (len >= 8192)) continue;
             if (offset >= 8192) continue;
             char* tuple = new char[len + 1];
-//            printf(" f: %d ", offset);
+            memset(tuple, 0, len + 1);
             memcpy(tuple, halfPageData + offset, len);
             // pg_class
             if (mode == 0) {
@@ -85,7 +85,6 @@ bool processHalfPage(char* halfPageData, int pageNum, const char * tableRelFileN
                     LOG(LOG_LEVEL_FATAL, "resolve pg_attribute column attr failed. exit...");
                     exit(1);
                 }
-
             }
             delete[] tuple;
         }
