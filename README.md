@@ -101,7 +101,7 @@ require: gcc
 
 support range: postgresql/opengauss
 
-# CONCAT ME
+# CONTACT ME
 
 email: baijiu1100@hotmail.com
 
