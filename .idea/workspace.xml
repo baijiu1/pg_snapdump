@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
+  <component name="CMakeReloadState">
+    <option name="reloaded" value="true" />
+  </component>
+  <component name="CMakeRunConfigurationManager">
+    <generated>
+      <config projectName="pg_hexretro" targetName="pg_hexretro" />
+    </generated>
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" GENERATION_OPTIONS="-DCMAKE_TOOLCHAIN_FILE=/Users/haruhi/.vcpkg-clion/vcpkg/scripts/buildsystems/vcpkg.cmake" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9bb3a83d-647b-4228-ac85-198360b40753" name="更改" comment="update:&#10;1、change usage context" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2024" />
+    <option name="minorVersion" value="1" />
+    <option name="productBranch" value="Classic" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="312brw1SDbQjttGjZ0r7654UzfM" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "CMake 应用程序.pg_hexretro.executor": "Run",
+    "CMake 应用程序.pg_snpdump.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/haruhi/ClionProjects/pg_hexretro",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "CMakeSettings",
+    "structure.view.defaults.are.configured": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="pg_hexretro" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="dump -D $PROJECT_DIR$/../postgresql-17.2/debug_pg/data -d test -t mixed_data_table -s" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="pg_hexretro" TARGET_NAME="pg_hexretro" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="pg_hexretro" RUN_TARGET_NAME="pg_hexretro">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="NimRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="nim.task.build.to.cache" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="9bb3a83d-647b-4228-ac85-198360b40753" name="更改" comment="" />
+      <created>1754725317128</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1754725317128</updated>
+      <workItem from="1754725318365" duration="114449000" />
+      <workItem from="1755091623929" duration="58677000" />
+      <workItem from="1755745004438" duration="25657000" />
+      <workItem from="1756085841533" duration="1243000" />
+      <workItem from="1756102155826" duration="693000" />
+      <workItem from="1756102870933" duration="6475000" />
+      <workItem from="1756695794132" duration="598000" />
+      <workItem from="1756710458685" duration="1389000" />
+      <workItem from="1774512861442" duration="74465000" />
+      <workItem from="1775999740017" duration="454498000" />
+      <workItem from="1778978834221" duration="8353000" />
+      <workItem from="1779161779685" duration="17494000" />
+    </task>
+    <task id="LOCAL-00001" summary="first version">
+      <option name="closed" value="true" />
+      <created>1755745031853</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1755745031853</updated>
+    </task>
+    <task id="LOCAL-00002" summary="first version">
+      <option name="closed" value="true" />
+      <created>1755747256788</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1755747256788</updated>
+    </task>
+    <task id="LOCAL-00003" summary="update:&#10;1、更新了数据展示方式，更改为每解析一条tuple就显示，应对大文件">
+      <option name="closed" value="true" />
+      <created>1755834507178</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755834507178</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update:&#10;1、提价cmakelist文件">
+      <option name="closed" value="true" />
+      <created>1755842799812</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1755842799812</updated>
+    </task>
+    <task id="LOCAL-00005" summary="update:&#10;1、修正整形和时间类型的bug">
+      <option name="closed" value="true" />
+      <created>1756087028808</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1756087028808</updated>
+    </task>
+    <task id="LOCAL-00006" summary="update:&#10;1、清理注释">
+      <option name="closed" value="true" />
+      <created>1756102836036</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1756102836036</updated>
+    </task>
+    <task id="LOCAL-00007" summary="update:&#10;1、change usage context">
+      <option name="closed" value="true" />
+      <created>1779019645725</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1779019645726</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VCPKGProject">
+    <isAutomaticCheckingOnLaunch value="false" />
+    <isAutomaticFoundErrors value="true" />
+    <isAutomaticReloadCMake value="true" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first version" />
+    <MESSAGE value="update:&#10;1、更新了数据展示方式，更改为每解析一条tuple就显示，应对大文件" />
+    <MESSAGE value="update:&#10;1、提价cmakelist文件" />
+    <MESSAGE value="update:&#10;1、修正整形和时间类型的bug" />
+    <MESSAGE value="update:&#10;1、清理注释" />
+    <MESSAGE value="update:&#10;1、change usage context" />
+    <option name="LAST_COMMIT_MESSAGE" value="update:&#10;1、change usage context" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
