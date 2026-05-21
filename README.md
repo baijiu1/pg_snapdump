@@ -31,14 +31,6 @@ Useful: parse data with mark of deleted.
 
 **Linux/MacOS**
 
-1. configure PG_VERSION_NUM in pg_config.h to match your postgresql/opengauss version, default postgresql 17.2.
-```c
-cd pg_snapdump/
-vim pg_config.h
-647 #define PG_VERSION_NUM 170002
-```
-
-2. compile
 ```shell
 cmake .
 make
